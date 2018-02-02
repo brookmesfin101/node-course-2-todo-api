@@ -1,5 +1,6 @@
 var express = require("express");
 var bodyParser = require("body-parser");
+var {ObjectID} = require('mongodb');
 
 var {mongoose} = require("./db/mongoose");
 var {Todo} = require("./models/todo");
@@ -27,6 +28,37 @@ app.get("/todos", (req, res) => {
     }, (e) => {
         res.status(400).send(e);
     })
+});
+
+app.get('/todos/:id', (req, res) => {
+    var id = req.params.id;
+
+    if(ObjectID.isValid(id)){
+        Todo.findById(id).then((todo) => {
+            if(todo){
+                res.send({todo});
+            }
+            else {
+                res.status(404).send();
+            }
+        }, (e) => {
+            res.status(404).send();
+        })
+    }
+    else {
+        res.status(404).send();
+    }
+
+    // Validate id using iValid
+        // respond with 404 if not found -- send back empty send
+    
+    // findById
+        // success
+            // if todo - send it back
+            // if no todo - send back 404 with empty body
+        // error
+            // 400 - and send empty body back
+    //res.send(req.params);
 });
 
 app.listen(3000, () => {
