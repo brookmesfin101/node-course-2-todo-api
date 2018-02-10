@@ -8,3 +8,5 @@ module.exports = {
     mongoose : mongoose
 }
 
+process.env.NODE_ENV === "production"
+
